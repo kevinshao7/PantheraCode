@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from Classes import *
-from FlightProfileData import *
+from FlightProfileDataRASAero import *
 
 #cr is root chord
 #ct is tip chord

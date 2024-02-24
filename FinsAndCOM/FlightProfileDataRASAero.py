@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ambiance import Atmosphere
 
-df = pd.read_csv("Flight_Test_RASAeroII.CSV")
+df = pd.read_csv("FinsAndCOM\Flight_Test_RASAeroII.CSV")
 #Time (sec),Stage,Stage Time (sec),Mach Number,Angle of Attack (deg),0-4
 #CD,CL,Thrust (lb),Weight (lb),Drag (lb),5-9
 #Lift (lb),CG (in),CP (in),Stability Margin (cal),Accel (ft/sec^2), 10-14

@@ -141,32 +141,76 @@ def calculate_COM(partlist,units="metric",printresults=True,plot=True):
     plt.show()
   return rocketCOM, rocketmass
 
+##### MY FUNCTION: PLOTS STABILITY AND COP VS 2 CAL POINT AND PRINTS STABILITY AT TIME T #######
+
+#cops from RASAero for mach 0,0.5,1.0 .... 5.0
+def stability_check(cops,t,p):
+    if len(cops) != 11:
+        raise ValueError("cops input must be length 11, with cops from 0,0.5.... 5 mach from rasaero")
+    #machs=[0,0.5,1,1.5,2,2.5,3,3.5,4,4.5] find from data sheet the approx time corresponding 5.5 will be extrapolated
+    mach_to_times=[0.00,3.81,7.26,11.03,15.94,19.64,22.52,25.36,27.74,29.79,31.65] #corresponding
+    coeffs=np.polyfit(mach_to_times,cops,p)
+    eq=np.poly1d(coeffs)
+    t_com=np.linspace(0,35,10*35)
+    y_cop=eq(t_com)
+    coms=[]
+    cals2 = []
+    for j in range(len(t_com)):
+        coms.append((9.64-calcCentreOfMass(t_com[j]))*39.37) #cop must be 2 cals below com
+        cals2.append((9.64-calcCentreOfMass(t_com[j])+2*0.375)*39.37)
+    calibers=(y_cop-coms)/(0.375*39.37)
+    figure,axes1=plt.subplots(1,2)
+    plt.tight_layout()
+    axes1[0].plot(t_com,coms,color='red',label='COM')
+    axes1[0].legend(loc='upper right')
+    axes1[0].set_xlabel('Time(s)')
+    axes1[0].set_ylabel('Distance from nose tip (inches)')
+    axes1[0].plot(t_com,y_cop,color='green',label='C.O.P - ONLY VALID TO BLACK LINE')
+    axes1[0].plot(t_com, cals2, color = 'red', label = '2 cal point', linestyle = 'dotted')
+    axes1[0].axvline(32.82, color='black', label='mach 5.5 timestamp', linestyle = 'dotted')
+    for i in range(0,len(cops)):
+      axes1[0].plot(mach_to_times[i],cops[i],marker='o',markeredgecolor="yellow", markerfacecolor="purple")
+    axes1[0].legend(loc='lower left')
+    axes1[0].set_title('COP vs COM')
+    if not 0<=t<=33.6:
+      raise ValueError("time must be in range 0 to 33.6s")
+    t_finder=round(10*t)
+    stability_point=calibers[t_finder]
+    print(f'Stability at time {round(t)} seconds is {stability_point} calibers.')
+    axes1[1].plot(t_com,calibers,label='calibers of stability')
+    axes1[1].axvline(32.82, color='black', label='mach 5.5/max speed time', linestyle = 'dotted')
+    axes1[1].axhline(2, color = 'red', label = '2 cal point', linestyle = 'dotted')
+    axes1[1].set_xlabel('Time(s)')
+    axes1[1].set_ylabel('Calibers of stability')
+    axes1[1].legend(loc='upper right')
+    plt.title(f'Stability Analysis',loc='center')
+    plt.show()
+
 if __name__ == "__main__":
-    bodylength = 1066.8 #mm
-    noseconelength = 231.1
-    bodydensity = 1100/1524 #g/mm, from https://eurospacetechnology.eu/index.php?id_product=1685&id_product_attribute=338&rewrite=g12-bodytube-30-60-inch&controller=product#/94-length-60_inch
-    #Motor Model: Cesaroni 4864L2375-P
-    #Motor Data Sheet: http://www.pro38.com/products/pro75/motor/MotorData.php?prodid=4864L2375-P
-    motorlength = 621 #mm
-    unburnedmotordensity = 4161/621 #g/mm
-    burnedmotordensity = 1840/621 #g/mm
-    couplerdensity = 260/381
-    couplerlength = 200
-    burnfraction =0
-    unburnedlength = (1-burnfraction)*motorlength
-    burnedlength = burnfraction*motorlength
-
-
-    partlist = [ #mass, position
-    Section("Body",bodydensity*(bodylength),noseconelength,bodylength),
-    Section("Nosecone",bodydensity*noseconelength,0,noseconelength+40.7,uniform=False,COM=noseconelength*0.666),
-    Section("Unburned Motor",(1-burnfraction)*motorlength*unburnedmotordensity,noseconelength+bodylength-unburnedlength,unburnedlength),
-    Section("Burned Motor",burnfraction*motorlength*burnedmotordensity,noseconelength+bodylength-unburnedlength-burnedlength,burnedlength),
-    Section("Fins",1250,noseconelength+bodylength-170,150),
-    Part("Parachute",550,330),
-    Part("Plate1",60,300),
-    Part("Plate3",60,noseconelength+bodylength-unburnedlength-burnedlength-5),
-    Part("Electronics",400,420),
-    Section("Coupler",couplerdensity*couplerlength,370,couplerlength)]
-    rocketCOM,rocketmass = calculate_COM(partlist)
-    calculate_COM(partlist,units="imperial")
+  #Below should reflect most recent Panthera design as of February 24, 2024
+  bodylength = 1066.8 #mm
+  noseconelength = 231.1
+  bodydensity = 1100/1524 #g/mm, from https://eurospacetechnology.eu/index.php?id_product=1685&id_product_attribute=338&rewrite=g12-bodytube-30-60-inch&controller=product#/94-length-60_inch
+  #Motor Model: Cesaroni 4864L2375-P
+  #Motor Data Sheet: http://www.pro38.com/products/pro75/motor/MotorData.php?prodid=4864L2375-P
+  motorlength = 621 #mm
+  unburnedmotordensity = 4161/621 #g/mm
+  burnedmotordensity = 1840/621 #g/mm
+  couplerdensity = 260/381
+  couplerlength = 200
+  burnfraction =0
+  unburnedlength = (1-burnfraction)*motorlength
+  burnedlength = burnfraction*motorlength
+  partlist = [ #mass, position
+  Section("Body",bodydensity*(bodylength),noseconelength,bodylength),
+  Section("Nosecone",bodydensity*noseconelength,0,noseconelength+40.7,uniform=False,COM=noseconelength*0.666),
+  Section("Unburned Motor",(1-burnfraction)*motorlength*unburnedmotordensity,noseconelength+bodylength-unburnedlength,unburnedlength),
+  Section("Burned Motor",burnfraction*motorlength*burnedmotordensity,noseconelength+bodylength-unburnedlength-burnedlength,burnedlength),
+  Section("Fins",1250,noseconelength+bodylength-170,150),
+  Part("Parachute",550,330),
+  Part("Plate1",60,300),
+  Part("Plate3",60,noseconelength+bodylength-unburnedlength-burnedlength-5),
+  Part("Electronics",400,420),
+  Section("Coupler",couplerdensity*couplerlength,370,couplerlength)]
+  rocketCOM,rocketmass = calculate_COM(partlist)
+  calculate_COM(partlist,units="imperial")
