@@ -3,12 +3,13 @@ Body component classes
 """
 
 from operator import length_hint
-from Global_vars import *
 import numpy as np
 import time
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.widgets import Slider
+from globalvariables import *
+
 
 class Fins:
   """
@@ -247,8 +248,3 @@ class Nosecone:
     C_N_nose = 2
     return C_N_nose
 
-#Initialises the known classes for the rocket (not the fins)
-
-Bodyone = Body(Body_dia, Body_len)
-Cone = Nosecone(Nosecone_length)
-Fin = Fins(0.207,0.066,0.036,0,Body_dia/2) 
