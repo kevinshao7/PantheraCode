@@ -1,29 +1,30 @@
 """
-Body flight profile critical values
+Panthera design parameters, last updated February 24, 2024
 """
 import numpy as np
-"""
-Taken from Henry Free's preliminary design document - Flight parameters
-"""
-speed_sound = 295 #speed of sound
+from ambiance import Atmosphere
 
-start_mass = 632 #Wet mass, kg
-end_mass = 208 #Recovery Mass, kg
-v_burnout = 1588.34 #Burnout velocity, m/s
-max_q_velo = 841.079701 #Velocity at Max-Q, m/s
-max_q_rho = 0.403219 #Density at Max-Q, kg/m3
-max_q_staticp = 25687.78 #Static pressure at Max-Q, Pa
+
+speed_sound = 343 #speed of sound, m/s shouldn't this be 343?
+
+start_mass = 7.5 #Wet mass, kg
+end_mass = 5.2 #Recovery Mass, kg
+v_burnout = 585 #Burnout velocity, m/s
+max_q_velo = 580.03 #Velocity at Max-Q, m/s
+#MaxQ occurs at 2095 feet
+max_q_alt = 638.6 #m
+max_q_atmosphere = Atmosphere(np.array([max_q_alt]))
+max_q_rho = max_q_atmosphere.density[0]
+max_q_staticp = max_q_atmosphere.pressure[0]
 p_atm = 94321.68 #Static pressure at launch, Pa
 max_q_Mach = max_q_velo/speed_sound
 max_q_beta = np.sqrt(abs(max_q_Mach**2 - 1))
 
-"""
-Taken from Henry Free's preliminary design document - Geometry parameters, m
-"""
-Nosecone_length = 1.775 #Nosecone length
-Body_dia = 0.375 #body diameter
-Body_len = 7.865 #body tube length
-CoM = 6.10 #for Griffin
+
+Nosecone_length = 0.231 #Nosecone length
+Body_dia = 0.0794 #body diameter
+Body_len = 1.0668 #body tube length
+CoM = 0.842 #for Panthera
 
 """
 Derived variables - Geometry m

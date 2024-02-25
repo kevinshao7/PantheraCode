@@ -198,7 +198,7 @@ if __name__ == "__main__":
   burnedmotordensity = 1840/621 #g/mm
   couplerdensity = 260/381
   couplerlength = 200
-  burnfraction =0
+  burnfraction =1
   unburnedlength = (1-burnfraction)*motorlength
   burnedlength = burnfraction*motorlength
   partlist = [ #mass, position
