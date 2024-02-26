@@ -64,7 +64,7 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
     print(f'Safety check: Max mach number in array is: {max(mach_fplot)}')
 
 if __name__ == "__main__":
-    Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.75, 0.50, 0.40, 12e-3, 1e-3, 160, 185.6, 15.36, 5.6 #torsion freqs (edited for Al here)
+    Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 160, 185.6, 15.36, 5.6 #torsion freqs (edited for Al here)
     # edit above as appropriate. 
     thc = th - 2 * ths
     sf = 1.5
