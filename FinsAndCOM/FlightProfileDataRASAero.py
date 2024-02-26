@@ -23,20 +23,7 @@ ay_array = np.zeros(len(ax_array))
 az_array = np.array(df.iloc[:, 15])*0.3048
 # q_array = np.array(df.iloc[:, 15])
 
-
-# e0_array = np.array(df.iloc[:, 10])
-# e1_array = np.array(df.iloc[:, 11])
-# e2_array = np.array(df.iloc[:, 12])
-# e3_array = np.array(df.iloc[:, 13])
-
 atmosphere = Atmosphere(z_array)
 pressure_array = atmosphere.pressure
 density_array = atmosphere.density
 q_array = density_array*(np.array(df.iloc[:,17])**2)/2
-
-
-
-# velocity_array = np.array([np.linalg.norm([vx_array[a], vy_array[a], vz_array[a]]) for a in range(len(vx_array))])
-# plt.plot(time_array, vz_array)
-# plt.show()
-# accel_array = np.array(np.linalg.norm(ax_array[a], ay_array[a], az_array[a]))

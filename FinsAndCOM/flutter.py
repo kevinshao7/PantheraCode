@@ -51,8 +51,6 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
     """
     plt.xlabel('Time (s)')
     plt.ylabel('Mach number')
-    plt.ylim(0,10)
-    plt.yticks(np.arange(0,10,0.5))
     plt.legend()
     plt.show()
     safety_plot = [critmach_noncomptaper[a]/mach_fplot[a] for a in range(len(critMJ_plot))]

@@ -151,7 +151,7 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
   #Plot Normal Force Coefficient as function of time
   plt.plot(t_plot[0:end1:1], cna_plot[0:end1:1], label = 'CNalpha per rad')
   plt.title("Normal Coefficient CN")
-  mach_to_timesarr=mach_to_times(mach_array)
+  mach_to_timesarr=mach_to_times(mach_array,time_array)
   colors = ['blue','green','yellow','orange','red','purple','black']
   for i in range(len(mach_to_timesarr)):
     plt.axvline(mach_to_timesarr[i,1], color = colors[int(2*mach_to_timesarr[i,0])], label = f'Mach {mach_to_timesarr[i,0]}', linestyle = 'dotted')

@@ -195,7 +195,7 @@ def stability_check(cops,t,p,plot=True):
   if plot:
     plotmachs = np.linspace(0,np.max(machs_for_fitting),1000)
     plt.plot(plotmachs,eq(plotmachs),label="Fitted Values")
-    plt.scatter(machs_for_fitting,cops,label="Data from RASAero")
+    plt.scatter(machs_for_fitting,cops,color="black",marker="+",label="Data from RASAero")
     plt.xlabel("Mach Number")
     plt.ylabel("Center of Pressure")
     plt.legend()
@@ -226,7 +226,7 @@ def stability_check(cops,t,p,plot=True):
   mach_to_times_arr = mach_to_times(mach_array,time_array)
   for i in range(0,len(mach_to_times_arr[0,:])):
     axes1[0].plot(mach_to_times_arr[i,1],cops[i],marker='o',markeredgecolor="yellow", markerfacecolor="purple")
-  axes1[0].legend(loc='lower left')
+  axes1[0].legend(loc='center right')
   axes1[0].set_title('COP vs COM')
   if not 0<=t<=33.6:
     raise ValueError("time must be in range 0 to 33.6s")
@@ -238,7 +238,7 @@ def stability_check(cops,t,p,plot=True):
   axes1[1].axhline(2, color = 'red', label = '2 cal point', linestyle = 'dotted')
   axes1[1].set_xlabel('Time(s)')
   axes1[1].set_ylabel('Calibers of stability')
-  axes1[1].legend(loc='upper right')
+  axes1[1].legend(loc='center right')
   plt.title(f'Stability Analysis',loc='center')
   plt.show()
   return
