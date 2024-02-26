@@ -43,4 +43,19 @@ angle_attack = 0 #angle of attack for simulation of stability
 angle_attack_force = 3 #angle of attack for simulation of stability, cannot be equal to zero
 desired_stability = 2.5
 angle_attack_force_run = 0.1 #Angle of attack right after launch
-
+"""
+Skin Shear Modulus: {Gs} Pa
+Root chord of {cr}m
+Tip chord of {ct}m
+Fin Span of {ss}m
+Thickness of {th}m
+Skin thickness of {ths}m
+Core thickness of {thc}m
+composite mass of {compm}
+freqs are sol {solf} and comp {compf} Hz'
+"""
+Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.75, 0.50, 0.40, 12e-3, 1e-3, 160, 185.6, 15.36, 5.6 #torsion freqs (edited for Al here)
+thc = th - 2 * ths
+############## Centre of Pressure ###################
+#array length 11 of rasaero cops from mach 0,0.5....5 (in inches as given in software)
+cops=[54.11,54.11,55.52,55.71,54.09,52.15,50.05,48,46.29,44.8,43.57]

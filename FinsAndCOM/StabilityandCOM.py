@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from FinForcePlotter import mach_to_times
-
+from globalvariables import *
+from FlightProfileDataRASAero import *
 
 
 class Section():
@@ -56,24 +57,34 @@ bodydensity = 1100/1524 #g/mm, from https://eurospacetechnology.eu/index.php?id_
 motorlength = 621 #mm
 unburnedmotordensity = 4161/621 #g/mm
 burnedmotordensity = 1840/621 #g/mm
+burntime = 1.9 #s
 couplerdensity = 260/381
 couplerlength = 200
-burnfraction =1
-unburnedlength = (1-burnfraction)*motorlength
-burnedlength = burnfraction*motorlength
-partlist = [ #mass, position
+initpartlist = [ #mass, position
 Section("Body",bodydensity*(bodylength),noseconelength,bodylength),
 Section("Nosecone",bodydensity*noseconelength,0,noseconelength+40.7,uniform=False,COM=noseconelength*0.666),
-Section("Unburned Motor",(1-burnfraction)*motorlength*unburnedmotordensity,noseconelength+bodylength-unburnedlength,unburnedlength),
-Section("Burned Motor",burnfraction*motorlength*burnedmotordensity,noseconelength+bodylength-unburnedlength-burnedlength,burnedlength),
 Section("Fins",1250,noseconelength+bodylength-170,150),
 Part("Parachute",550,330),
 Part("Plate1",60,300),
-Part("Plate3",60,noseconelength+bodylength-unburnedlength-burnedlength-5),
+Part("Plate3",60,noseconelength+bodylength-motorlength-5),
 Part("Electronics",400,420),
 Section("Coupler",couplerdensity*couplerlength,370,couplerlength)]
 
-def calculate_COM(partlist,units="metric",printresults=True,plot=True):
+
+def calculate_COM(initpartlist,time:float, units="metric",printresults=True,plot=True):
+  if time >= burntime:
+    burnfraction=1
+    unburnedlength = (1-burnfraction)*motorlength
+  else:
+    burnfraction = (burntime-time)/burntime
+  burnedlength = burnfraction*motorlength
+  unburnedlength= motorlength-burnedlength
+  unburnedmotor = Section("Unburned Motor",(1-burnfraction)*motorlength*unburnedmotordensity,noseconelength+bodylength-unburnedlength,unburnedlength)
+  burnedmotor = Section("Burned Motor",burnfraction*motorlength*burnedmotordensity,noseconelength+bodylength-unburnedlength-burnedlength,burnedlength)
+  partlist = initpartlist.copy()
+  partlist.append(unburnedmotor)
+  partlist.append(burnedmotor)
+  print(len(partlist))
   #Compute center of mass by weighted average
   rocketCOM = 0
   rocketmass = 0
@@ -172,52 +183,66 @@ def calculate_COM(partlist,units="metric",printresults=True,plot=True):
     plt.show()
   return rocketCOM, rocketmass
 
-##### MY FUNCTION: PLOTS STABILITY AND COP VS 2 CAL POINT AND PRINTS STABILITY AT TIME T #######
-
-#cops from RASAero for mach 0,0.5,1.0 .... 5.0
-def stability_check(cops,t,p):
-    if len(cops) != 11:
-        raise ValueError("cops input must be length 11, with cops from 0,0.5.... 5 mach from rasaero")
-    #machs=[0,0.5,1,1.5,2,2.5,3,3.5,4,4.5] find from data sheet the approx time corresponding 5.5 will be extrapolated
-    mach_to_times(mach_array)
-    coeffs=np.polyfit(mach_to_times,cops,p)
-    eq=np.poly1d(coeffs)
-    t_com=np.linspace(0,35,10*35)
-    y_cop=eq(t_com)
-    coms=[]
-    cals2 = []
-    centreofmass,totalmass = calculate_COM(partlist)
-    for j in range(len(t_com)):
-        coms.append((9.64-centreofmass(t_com[j]))*39.37) #cop must be 2 cals below com
-        cals2.append((9.64-centreofmass(t_com[j])+2*0.375)*39.37)
-    calibers=(y_cop-coms)/(0.375*39.37)
-    figure,axes1=plt.subplots(1,2)
-    plt.tight_layout()
-    axes1[0].plot(t_com,coms,color='red',label='COM')
-    axes1[0].legend(loc='upper right')
-    axes1[0].set_xlabel('Time(s)')
-    axes1[0].set_ylabel('Distance from nose tip (inches)')
-    axes1[0].plot(t_com,y_cop,color='green',label='C.O.P - ONLY VALID TO BLACK LINE')
-    axes1[0].plot(t_com, cals2, color = 'red', label = '2 cal point', linestyle = 'dotted')
-    axes1[0].axvline(32.82, color='black', label='mach 5.5 timestamp', linestyle = 'dotted')
-    for i in range(0,len(cops)):
-      axes1[0].plot(mach_to_times[i],cops[i],marker='o',markeredgecolor="yellow", markerfacecolor="purple")
-    axes1[0].legend(loc='lower left')
-    axes1[0].set_title('COP vs COM')
-    if not 0<=t<=33.6:
-      raise ValueError("time must be in range 0 to 33.6s")
-    t_finder=round(10*t)
-    stability_point=calibers[t_finder]
-    print(f'Stability at time {round(t)} seconds is {stability_point} calibers.')
-    axes1[1].plot(t_com,calibers,label='calibers of stability')
-    axes1[1].axvline(32.82, color='black', label='mach 5.5/max speed time', linestyle = 'dotted')
-    axes1[1].axhline(2, color = 'red', label = '2 cal point', linestyle = 'dotted')
-    axes1[1].set_xlabel('Time(s)')
-    axes1[1].set_ylabel('Calibers of stability')
-    axes1[1].legend(loc='upper right')
-    plt.title(f'Stability Analysis',loc='center')
+def stability_check(cops,t,p,plot=True):
+  tend=45 #plot until tend in seconds
+  if len(cops) != 11:
+      raise ValueError("cops input must be length 11, with cops from 0,0.5.... 5 mach from rasaero")
+  machs_for_fitting = np.arange(0,5.1,0.5)
+  print(len(machs_for_fitting))
+  print(len(cops))
+  coeffs=np.polyfit(machs_for_fitting,cops,p)
+  eq=np.poly1d(coeffs)
+  if plot:
+    plotmachs = np.linspace(0,np.max(machs_for_fitting),1000)
+    plt.plot(plotmachs,eq(plotmachs),label="Fitted Values")
+    plt.scatter(machs_for_fitting,cops,label="Data from RASAero")
+    plt.xlabel("Mach Number")
+    plt.ylabel("Center of Pressure")
+    plt.legend()
+    plt.title("Centre of Pressure Fit Sanity Check")
     plt.show()
+  tindex = np.argmin(np.abs(time_array-tend))
+  t_com=time_array[:tindex]
+  y_cop=eq(mach_array[:tindex])
+  coms=[]
+  cals2 = []
+  for j in range(len(t_com)):
+    centreofmass,totalmass = calculate_COM(initpartlist,t_com[j],units="imperial",printresults=True,plot=False)
+    print(centreofmass)
+    coms.append(centreofmass) #cop must be 2 cals below com
+    cals2.append(centreofmass+(2000*Body_dia)/25.4) #Body_dia is in metres
+  calibers=(y_cop-coms)/(1000*Body_dia/25.4) #Body_dia is in metres
+  figure,axes1=plt.subplots(1,2)
+  plt.tight_layout()
+  axes1[0].plot(t_com,coms,color='red',label='COM')
+  axes1[0].legend(loc='upper right')
+  axes1[0].set_xlabel('Time(s)')
+  axes1[0].set_ylabel('Distance from nose tip (inches)')
+  axes1[0].plot(t_com,y_cop,color='green',label='C.O.P - ONLY VALID TO BLACK LINE')
+  axes1[0].plot(t_com, cals2, color = 'red', label = '2 cal point', linestyle = 'dotted')
+  maxmach = np.max(mach_array)
+  maxmachi = np.argmax(mach_array)
+  axes1[0].axvline(time_array[maxmachi], color='black', label=f'max mach {maxmach} timestamp', linestyle = 'dotted')
+  mach_to_times_arr = mach_to_times(mach_array,time_array)
+  for i in range(0,len(mach_to_times_arr[0,:])):
+    axes1[0].plot(mach_to_times_arr[i,1],cops[i],marker='o',markeredgecolor="yellow", markerfacecolor="purple")
+  axes1[0].legend(loc='lower left')
+  axes1[0].set_title('COP vs COM')
+  if not 0<=t<=33.6:
+    raise ValueError("time must be in range 0 to 33.6s")
+  t_finder=round(10*t)
+  stability_point=calibers[t_finder]
+  print(f'Stability at time {round(t)} seconds is {stability_point} calibers.')
+  axes1[1].plot(t_com,calibers,label='calibers of stability')
+  axes1[1].axvline(time_array[maxmachi], color='black', label=f'max mach {maxmach} timestamp', linestyle = 'dotted')
+  axes1[1].axhline(2, color = 'red', label = '2 cal point', linestyle = 'dotted')
+  axes1[1].set_xlabel('Time(s)')
+  axes1[1].set_ylabel('Calibers of stability')
+  axes1[1].legend(loc='upper right')
+  plt.title(f'Stability Analysis',loc='center')
+  plt.show()
+  return
 
 if __name__ == "__main__":
-  rocketCOM,rocketmass = calculate_COM(partlist)
-  calculate_COM(partlist,units="imperial")
+  rocketCOM,rocketmass = calculate_COM(initpartlist,0)
+  calculate_COM(initpartlist,0,units="imperial")

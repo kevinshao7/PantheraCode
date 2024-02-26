@@ -4,7 +4,6 @@ from Classes import Fins, Body, Nosecone
 from aero_coefficients import *
 from forces import C_N_force, F_fin_N
 from globalvariables import *
-# from FlightProfileData import *
 from FlightProfileDataRASAero import *
 
 
@@ -73,11 +72,24 @@ def fin_F_array(angle_attack_force_run:float,test_fins:Fins,test_body:Body, star
   f_trunc_array = np.array(f_list)
   return t_trunc_array, f_trunc_array, max(f_list), cna, h_trunc_array, angles
 
-def mach_to_times(mach_array:np.array):
+def mach_to_times(mach_array:np.array,time_array:np.array):
+  """
+  Identifies times associated with certain mach numbers
+
+    Parameters
+    ----------
+    mach_array : numpy array
+    mach numbers during flight
+    time_array : numpy array
+    times during flight
+
+    Returns 
+    -------
+    2D array, left column mach numbers, right column time at which mach number achieved
+  """
   run = True
   currentmach = 0.5
   mach_to_times_arr = [[0,0]]
-
   for i in range(len(mach_array)):
     for j in range(1,8):
         if abs(mach_array[i] -j*0.5) < 0.01 and j*0.5 != mach_to_times_arr[len(mach_to_times_arr)-1][0]:
@@ -96,12 +108,15 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
     ----------
     test_fins : Fin object
     test_body : Body object
+
     Returns 
     -------
+    none, just plots
   """
   t_plot, f_plot, max_f, cna_plot, h_plot, ang_plot = fin_F_array(angle_attack_force_run,test_fins,test_body, start1, end1, step1)
   print(f'Max Fin Force is {max_f/1000} kN, Fin area of {test_fins.area()}m^2')
   #print(f'Chord_root, fin_span, Chord_tip, sweep_length, body_radius: {test_fins.Chord_root(), test_fins.fin_span(), test_fins.Chord_tip(), test_fins.sweep_length, test_fins.body_radius()}')
+  #Print Normal Force on fins as function of time
   plt.plot(t_plot, f_plot/1000, label = 'Normal Force on Fin') #conversion to kN
   plt.xlabel('Time(s)')
   plt.ylabel('Total Fin force /kN')
