@@ -14,12 +14,12 @@ Fin = Fins(0.207,0.066,0.036,0,Body_dia/2)
 #More parameters in file globalvariables and file StabilityandCOM (rocket parts masses and positions)
 
 ############## FIN FORCES ###################
-#fin_F_plotter(Fin,Bodyone)
+fin_F_plotter(Fin,Bodyone)
 
 ############## STABILITY AND CENTRE OF PRESSURE ###################
 t=32.8 #choose t to also find stability value at time t printed in terminal
 p=4   #degree of polynomial to fit COPs to. needs to accurately extrapolate from mach 5 to 5.5
-#stability_check(cops,t,p)
+stability_check(cops,t,p)
 
 ############## FIN FLUTTER ###################   
 noncomp_switch = True
