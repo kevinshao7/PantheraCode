@@ -218,7 +218,7 @@ def stability_check(cops,t,p,plot=True):
   axes1[0].legend(loc='upper right')
   axes1[0].set_xlabel('Time(s)')
   axes1[0].set_ylabel('Distance from nose tip (inches)')
-  axes1[0].plot(t_com,y_cop,color='green',label='C.O.P - ONLY VALID TO BLACK LINE')
+  axes1[0].plot(t_com,y_cop,color='green',label='C.O.P')
   axes1[0].plot(t_com, cals2, color = 'red', label = '2 cal point', linestyle = 'dotted')
   maxmach = np.max(mach_array)
   maxmachi = np.argmax(mach_array)
