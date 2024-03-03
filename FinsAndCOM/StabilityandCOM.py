@@ -49,8 +49,9 @@ class Part():
     return
 
 #Below should reflect most recent Panthera design as of February 24, 2024
-bodylength = 1066.8 #mm
-noseconelength = 231.1
+bodylength = 1279.4 #mm
+rocketradius= 79.4/2
+noseconelength = 397.0
 bodydensity = 1100/1524 #g/mm, from https://eurospacetechnology.eu/index.php?id_product=1685&id_product_attribute=338&rewrite=g12-bodytube-30-60-inch&controller=product#/94-length-60_inch
 #Motor Model: Cesaroni 4864L2375-P
 #Motor Data Sheet: http://www.pro38.com/products/pro75/motor/MotorData.php?prodid=4864L2375-P
@@ -58,25 +59,24 @@ motorlength = 621 #mm
 unburnedmotordensity = 4161/621 #g/mm
 burnedmotordensity = 1840/621 #g/mm
 burntime = 1.9 #s
-couplerdensity = 260/381
-couplerlength = 200
+couplerlength = 152.4
 initpartlist = [ #mass, position
 Section("Body",bodydensity*(bodylength),noseconelength,bodylength),
-Section("Nosecone",bodydensity*noseconelength,0,noseconelength+40.7,uniform=False,COM=noseconelength*0.666),
-Section("Fins",1250,noseconelength+bodylength-170,150),
-Part("Parachute",550,330),
-Part("Plate1",60,300),
-Part("Plate3",60,noseconelength+bodylength-motorlength-5),
-Part("Electronics",400,420),
-Section("Coupler",couplerdensity*couplerlength,370,couplerlength)]
+Section("Nosecone",bodydensity*(noseconelength+79.0),0,noseconelength+79.0,uniform=False,COM=noseconelength*0.666),
+Section("Fin Can",1000,noseconelength+bodylength-207.2,207.2),
+Section("Recovery Bay",700,692.0,355.0),
+Part("Upper Plate",60,471.7),
+Part("Lower Plate",60,1008.4),
+Part("Electronics",100,noseconelength*0.9),
+Section("Coupler",260,600.2,couplerlength)]
+#Motor not added in above, added in later because mass varies with time
 
 
 def calculate_COM(initpartlist,time:float, units="metric",printresults=True,plot=True):
   if time >= burntime:
     burnfraction=1
-    unburnedlength = (1-burnfraction)*motorlength
   else:
-    burnfraction = (burntime-time)/burntime
+    burnfraction = time/burntime
   burnedlength = burnfraction*motorlength
   unburnedlength= motorlength-burnedlength
   unburnedmotor = Section("Unburned Motor",(1-burnfraction)*motorlength*unburnedmotordensity,noseconelength+bodylength-unburnedlength,unburnedlength)
@@ -88,7 +88,6 @@ def calculate_COM(initpartlist,time:float, units="metric",printresults=True,plot
   #Compute center of mass by weighted average
   rocketCOM = 0
   rocketmass = 0
-  rocketradius= 79.375/2
   for i in range(len(partlist)):
     rocketCOM += partlist[i].mass*partlist[i].COM
     rocketmass += partlist[i].mass
@@ -185,9 +184,9 @@ def calculate_COM(initpartlist,time:float, units="metric",printresults=True,plot
 
 def stability_check(cops,t,p,plot=True):
   tend=45 #plot until tend in seconds
-  if len(cops) != 11:
-      raise ValueError("cops input must be length 11, with cops from 0,0.5.... 5 mach from rasaero")
-  machs_for_fitting = np.arange(0,5.1,0.5)
+  if len(cops) != 7:
+      raise ValueError("cops input must be length 11, with cops from 0,0.5.... 3 mach from rasaero")
+  machs_for_fitting = np.arange(0,3.1,0.5)
   print(len(machs_for_fitting))
   print(len(cops))
   coeffs=np.polyfit(machs_for_fitting,cops,p)
@@ -244,5 +243,4 @@ def stability_check(cops,t,p,plot=True):
   return
 
 if __name__ == "__main__":
-  rocketCOM,rocketmass = calculate_COM(initpartlist,0)
-  calculate_COM(initpartlist,0,units="imperial")
+  calculate_COM(initpartlist,0, units="imperial",printresults=True,plot=True)

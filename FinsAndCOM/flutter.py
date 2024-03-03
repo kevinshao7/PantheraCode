@@ -24,9 +24,10 @@ def flutterer(Gs, cr, ct, ss, th, ths, thc, startf, endf, stepf, solf, compf, so
         f1 = 1+1.87*(1-lam)**(1.6)
         critmach_noncomptaper.append(critmachnoncomp_toadd*f1)
         #Below is composite material, not currently implemneted
-        critMJ_toadd = np.sqrt(Gs*0.000145038/((pressure_array[j]/101325)*((lam+1)/2)*X_flut))*(compf/solf)*(np.sqrt(solm/compm))
-        critMJ.append(critMJ_toadd)
-    critMJ_array = np.array(critMJ)
+    #     critMJ_toadd = np.sqrt(Gs*0.000145038/((pressure_array[j]/101325)*((lam+1)/2)*X_flut))*(compf/solf)*(np.sqrt(solm/compm))
+    #     critMJ.append(critMJ_toadd)
+    # critMJ_array = np.array(critMJ)
+    critMJ_array = None
     return mach_f_array, t_f_array, critMJ_array, critmach_noncomp, critmach_noncomptaper
 
 def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
@@ -53,13 +54,14 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
     plt.ylabel('Mach number')
     plt.legend()
     plt.show()
-    safety_plot = [critmach_noncomptaper[a]/mach_fplot[a] for a in range(len(critMJ_plot))]
-    plt.plot(t_plotf[startf+500:endf-600:stepf], safety_plot[startf+500:endf-600:stepf])
-    plt.title('Safety factor for taper simulating')
-    plt.xlabel("Time (s)")
-    plt.ylabel("Safety Factor")
-    plt.show()
-    print(f'Safety check: Max mach number in array is: {max(mach_fplot)}')
+    #Below is simulation for fin tapering, not relevant for Panthera
+    # safety_plot = [critmach_noncomptaper[a]/mach_fplot[a] for a in range(len(critMJ_plot))]
+    # plt.plot(t_plotf[startf+500:endf-600:stepf], safety_plot[startf+500:endf-600:stepf])
+    # plt.title('Safety factor for taper simulating')
+    # plt.xlabel("Time (s)")
+    # plt.ylabel("Safety Factor")
+    # plt.show()
+    # print(f'Safety check: Max mach number in array is: {max(mach_fplot)}')
 
 if __name__ == "__main__":
     Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 160, 185.6, 15.36, 5.6 #torsion freqs (edited for Al here)
