@@ -63,7 +63,7 @@ couplerlength = 152.4
 initpartlist = [ #mass, position
 Section("Body",bodydensity*(bodylength),noseconelength,bodylength),
 Section("Nosecone",bodydensity*(noseconelength+79.0),0,noseconelength+79.0,uniform=False,COM=noseconelength*0.666),
-Section("Fin Can",1000,noseconelength+bodylength-207.2,207.2),
+Section("Fin Can",850,noseconelength+bodylength-207.2,207.2),
 Section("Recovery Bay",700,692.0,355.0),
 Part("Upper Plate",60,471.7),
 Part("Lower Plate",60,1008.4),

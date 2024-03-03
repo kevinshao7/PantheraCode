@@ -18,8 +18,10 @@ def flutterer(Gs, cr, ct, ss, th, ths, thc, startf, endf, stepf, solf, compf, so
     mach_f_array = np.array(mach_array[startf:endf:stepf])
     t_f_array = np.array(time_array[startf:endf:stepf])
     for j in range(startf, endf, stepf): #Calculations from NACA Technical Note 4197 https://ntrs.nasa.gov/api/citations/19930085030/downloads/19930085030.pdf
-        X_flut = 39.3*AR**3 * 1/(th/cr)**3 * 1/(AR+2)
-        critmachnoncomp_toadd = np.sqrt(Gs*0.000145038/((pressure_array[j]/101325)*((lam+1)/2)*X_flut))
+        X_flut = (39.3*AR**3)/((th/cr)**3 * 1/(AR+2)) #"Nondimensional" geometric parameter, has units of psi
+        X_flut = X_flut*6894.76 #Convert X_flut to pascals
+        #Gs is shear modulus, convert to psi
+        critmachnoncomp_toadd = np.sqrt(Gs/((pressure_array[j]/101325)*((lam+1)/2)*X_flut))
         critmach_noncomp.append(critmachnoncomp_toadd)
         f1 = 1+1.87*(1-lam)**(1.6)
         critmach_noncomptaper.append(critmachnoncomp_toadd*f1)
@@ -39,7 +41,7 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
         #plt.plot(t_plotf, critMJ_plot*sf2, label = f'Simulated with sf of {sf2}', color = 'blue', linestyle = 'dotted')
     if noncomp_switch == True:
         plt.plot(t_plotf, critmach_noncomp, label = 'Crit solid Mach', color = 'black')
-        plt.plot(t_plotf, critmach_noncomptaper, label = 'Crit solid Mach, taper experiment', color = 'black', linestyle = 'dotted')
+        #plt.plot(t_plotf, critmach_noncomptaper, label = 'Crit solid Mach, taper experiment', color = 'black', linestyle = 'dotted')
     #plt.plot(t_plotf, critMJ_plot, label = 'Critical Mach (NACA 4197)', color = 'blue')
     """ Finsim not currently implemented for Panthera as of February 25, 2024
     finsim_points = [2.25, 2.52, 2.83, 3.19, 3.62, 4.13, 4.75, 5.5] #flutter #difference in atmospheric model note.

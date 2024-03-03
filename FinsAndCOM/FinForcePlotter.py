@@ -117,9 +117,9 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
   print(f'Max Fin Force is {max_f/1000} kN, Fin area of {test_fins.area()}m^2')
   #print(f'Chord_root, fin_span, Chord_tip, sweep_length, body_radius: {test_fins.Chord_root(), test_fins.fin_span(), test_fins.Chord_tip(), test_fins.sweep_length, test_fins.body_radius()}')
   #Print Normal Force on fins as function of time
-  plt.plot(t_plot, f_plot/1000, label = 'Normal Force on Fin') #conversion to kN
+  plt.plot(t_plot, f_plot, label = 'Normal Force on Fin') #conversion to kN
   plt.xlabel('Time(s)')
-  plt.ylabel('Total Fin force /kN')
+  plt.ylabel('Total Fin force /N')
   plt.title(f'Angle of Attack is {angle_attack_force_run} degrees')
   color_array=np.zeros(len(mach_array))
   for i in range(len(mach_array)):
@@ -141,9 +141,9 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
   plt.legend()
   plt.show()
   #Plot Normal Force on Fin as function of time
-  plt.plot(h_plot/1000, f_plot/1000, label = 'Normal Force on Fin') #conversion to kN
+  plt.plot(h_plot/1000, f_plot, label = 'Normal Force on Fin') #conversion to kN
   plt.xlabel('Altitude (km)')
-  plt.ylabel('Total Fin force /kN')
+  plt.ylabel('Total Fin force /N')
   plt.title(f'Angle of Attack is {angle_attack_force_run} degrees')
   plt.ylim(0, (max_f+10)/1000)
   plt.legend()
