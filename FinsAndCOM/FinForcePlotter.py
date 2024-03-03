@@ -137,7 +137,6 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
       if color_array[i] != color_array[i+1]:
           plt.axvline(time_array[i], color = colors[int(color_array[i])], label = labels[int(color_array[i])], linestyle = '-')
           plt.axvline(time_array[i+1], color = colors[int(color_array[i+1])], label = labels[int(color_array[i+1])], linestyle = '--')
-  plt.ylim(0, (max_f+10)/1000)
   plt.legend()
   plt.show()
   #Plot Normal Force on Fin as function of time
@@ -145,7 +144,6 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
   plt.xlabel('Altitude (km)')
   plt.ylabel('Total Fin force /N')
   plt.title(f'Angle of Attack is {angle_attack_force_run} degrees')
-  plt.ylim(0, (max_f+10)/1000)
   plt.legend()
   plt.show()
   #Plot Normal Force Coefficient as function of time

@@ -206,7 +206,7 @@ def stability_check(cops,t,p,plot=True):
   coms=[]
   cals2 = []
   for j in range(len(t_com)):
-    centreofmass,totalmass = calculate_COM(initpartlist,t_com[j],units="imperial",printresults=True,plot=False)
+    centreofmass,totalmass = calculate_COM(initpartlist,t_com[j],units="imperial",printresults=False,plot=False)
     print(centreofmass)
     coms.append(centreofmass) #cop must be 2 cals below com
     cals2.append(centreofmass+(2000*Body_dia)/25.4) #Body_dia is in metres

@@ -54,7 +54,7 @@ Core thickness of {thc}m
 composite mass of {compm}
 freqs are sol {solf} and comp {compf} Hz'
 """
-Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 588, None, 15.36, None #torsion freqs (edited for Al here)
+Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 18e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 588, None, 15.36, None #torsion freqs (edited for Al here)
 thc = th - 2 * ths
 ############## Centre of Pressure ###################
 #array length 11 of rasaero cops from mach 0,0.5....3 (in inches as given in software)
