@@ -6,12 +6,18 @@ from globalvariables import *
 ### Author Ben Sutcliffe, Updated by Kevin Shao
 ### Last modified February 25, 2024
 
+############## FLIGHT PROFILE DATA SOURCE ############
+#RASAero:
+from FlightProfileDataRASAero import *
+#Open Rocket
 
 ############## INITIALIZE STRUCTURES ###################
 Bodyone = Body(Body_dia, Body_len)
 Cone = Nosecone(Nosecone_length)
 Fin = Fins(0.207,0.066,0.036,0,Body_dia/2) 
 #More parameters in file globalvariables and file StabilityandCOM (rocket parts masses and positions)
+
+
 
 ############## FIN FORCES ###################
 fin_F_plotter(Fin,Bodyone)

@@ -22,7 +22,7 @@ max_q_beta = np.sqrt(abs(max_q_Mach**2 - 1))
 
 ############## ROCKET GEOMETRY ###################
 Nosecone_length = 0.231 #Nosecone length
-Body_dia = 0.0794 #body diameter
+Body_dia = 0.0794 #body diameter in metres
 Body_len = 1.0668 #body tube length
 CoM = 0.842 #for Panthera
 total_length = Body_len+Nosecone_length

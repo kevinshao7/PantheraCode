@@ -4,7 +4,6 @@ from Classes import Fins, Body, Nosecone
 from aero_coefficients import *
 from forces import C_N_force, F_fin_N
 from globalvariables import *
-from FlightProfileDataRASAero import *
 
 
 #####
@@ -190,4 +189,5 @@ def wind_lookup(alti): #Legacy code from Griffin, not yet modified for Panthera 
   return wind_s
 
 if __name__ == "__main__":
+  from FlightProfileDataRASAero import *
   fin_F_plotter()

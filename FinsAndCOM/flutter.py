@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from Classes import *
-from FlightProfileDataRASAero import *
 from globalvariables import *
 
 startf, endf, stepf = 0,4000, 1
@@ -40,7 +39,7 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
         plt.plot(t_plotf, mach_fplot*sf, label = f'Simulated with safety factor of {sf}', color = 'red', linestyle = 'dotted')
         #plt.plot(t_plotf, critMJ_plot*sf2, label = f'Simulated with sf of {sf2}', color = 'blue', linestyle = 'dotted')
     if noncomp_switch == True:
-        plt.plot(t_plotf, critmach_noncomp, label = 'Crit solid Mach', color = 'black')
+        plt.plot(t_plotf, critmach_noncomp, label = 'Critical Mach', color = 'black')
         #plt.plot(t_plotf, critmach_noncomptaper, label = 'Crit solid Mach, taper experiment', color = 'black', linestyle = 'dotted')
     #plt.plot(t_plotf, critMJ_plot, label = 'Critical Mach (NACA 4197)', color = 'blue')
     """ Finsim not currently implemented for Panthera as of February 25, 2024
@@ -66,6 +65,7 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
     # print(f'Safety check: Max mach number in array is: {max(mach_fplot)}')
 
 if __name__ == "__main__":
+    from FlightProfileDataRASAero import *
     Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 160, 185.6, 15.36, 5.6 #torsion freqs (edited for Al here)
     # edit above as appropriate. 
     thc = th - 2 * ths

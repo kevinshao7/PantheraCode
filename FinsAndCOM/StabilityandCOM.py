@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from FinForcePlotter import mach_to_times
 from globalvariables import *
-from FlightProfileDataRASAero import *
 
 
 class Section():
@@ -92,14 +91,15 @@ def calculate_COM(initpartlist,time:float, units="metric",printresults=True,plot
     rocketCOM += partlist[i].mass*partlist[i].COM
     rocketmass += partlist[i].mass
   rocketCOM = rocketCOM/rocketmass
+  if units == "imperial":
+    rocketCOM = rocketCOM/25.4
+    rocketmass = rocketmass/453.592
   if printresults:
     if units == "metric":
       print(rocketCOM)
       print("Rocket Center of Mass From Nosecone Tip: "+str(rocketCOM)+" mm")
       print("Rocket Mass: "+str(rocketmass)+" g")
     elif units == "imperial":
-      rocketCOM = rocketCOM/25.4
-      rocketmass = rocketmass/453.592
       print("Rocket Center of Mass From Nosecone Tip: "+str(rocketCOM)+" in")
       print("Rocket Mass: "+str(rocketmass)+" lb")
     else:
@@ -196,7 +196,7 @@ def stability_check(cops,t,p,plot=True):
     plt.plot(plotmachs,eq(plotmachs),label="Fitted Values")
     plt.scatter(machs_for_fitting,cops,color="black",marker="+",label="Data from RASAero")
     plt.xlabel("Mach Number")
-    plt.ylabel("Center of Pressure")
+    plt.ylabel("Center of Pressure (in)")
     plt.legend()
     plt.title("Centre of Pressure Fit Sanity Check")
     plt.show()
@@ -211,6 +211,7 @@ def stability_check(cops,t,p,plot=True):
     coms.append(centreofmass) #cop must be 2 cals below com
     cals2.append(centreofmass+(2000*Body_dia)/25.4) #Body_dia is in metres
   calibers=(y_cop-coms)/(1000*Body_dia/25.4) #Body_dia is in metres
+  print(Body_dia)
   figure,axes1=plt.subplots(1,2)
   plt.tight_layout()
   axes1[0].plot(t_com,coms,color='red',label='COM')
@@ -243,4 +244,6 @@ def stability_check(cops,t,p,plot=True):
   return
 
 if __name__ == "__main__":
+  from FlightProfileDataRASAero import *
   calculate_COM(initpartlist,0, units="imperial",printresults=True,plot=True)
+  stability_check(cops,0,3,plot=True)
