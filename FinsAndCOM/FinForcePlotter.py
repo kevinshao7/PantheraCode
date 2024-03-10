@@ -57,7 +57,7 @@ def fin_F_array(angle_attack_force_run:float,test_fins:Fins,test_body:Body, star
   print("Using variable angle of attack from OpenRocket flight sim")
   for i in range(start1, end1, step1):
     if variableangles:
-         angle_attack_wind=angles[i]
+         angle_attack_wind=angleattack_array[i]
     else:
       if i>5:
         #angle_attack_wind = (180/np.pi)*np.arctan(5/vz_array[i]) #assume 5m/s crosswind at all altitudes
@@ -127,6 +127,7 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
   #print(f'Chord_root, fin_span, Chord_tip, sweep_length, body_radius: {test_fins.Chord_root(), test_fins.fin_span(), test_fins.Chord_tip(), test_fins.sweep_length, test_fins.body_radius()}')
   #Print Normal Force on fins as function of time
   plt.plot(t_plot, f_plot, label = 'Normal Force on Fin') #conversion to kN
+  plt.plot(t_plot,ang_plot,color="red",label="Angle of Attack")
   plt.xlabel('Time(s)')
   plt.ylabel('Total Fin force /N')
   plt.title(f'Angle of Attack is {angle_attack_force_run} degrees')

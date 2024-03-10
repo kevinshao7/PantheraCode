@@ -12,6 +12,7 @@ speed_sound = 343 #speed of sound, m/s shouldn't this be 343?
 #flightdatasource = "RASAero"
 
 #Open Rocket
+#Open Rocket allows for variable angle of attack
 from FlightProfileDataOpenRocket import *
 flightdatasource="OpenRocket"
 ############## FLIGHT CHARACHTERISTICS ###################
