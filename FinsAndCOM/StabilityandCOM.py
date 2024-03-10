@@ -83,7 +83,6 @@ def calculate_COM(initpartlist,time:float, units="metric",printresults=True,plot
   partlist = initpartlist.copy()
   partlist.append(unburnedmotor)
   partlist.append(burnedmotor)
-  print(len(partlist))
   #Compute center of mass by weighted average
   rocketCOM = 0
   rocketmass = 0
@@ -187,8 +186,6 @@ def stability_check(cops,t,p,plot=True):
   if len(cops) != 7:
       raise ValueError("cops input must be length 11, with cops from 0,0.5.... 3 mach from rasaero")
   machs_for_fitting = np.arange(0,3.1,0.5)
-  print(len(machs_for_fitting))
-  print(len(cops))
   coeffs=np.polyfit(machs_for_fitting,cops,p)
   eq=np.poly1d(coeffs)
   if plot:
@@ -207,11 +204,9 @@ def stability_check(cops,t,p,plot=True):
   cals2 = []
   for j in range(len(t_com)):
     centreofmass,totalmass = calculate_COM(initpartlist,t_com[j],units="imperial",printresults=False,plot=False)
-    print(centreofmass)
     coms.append(centreofmass) #cop must be 2 cals below com
     cals2.append(centreofmass+(2000*Body_dia)/25.4) #Body_dia is in metres
   calibers=(y_cop-coms)/(1000*Body_dia/25.4) #Body_dia is in metres
-  print(Body_dia)
   figure,axes1=plt.subplots(1,2)
   plt.tight_layout()
   axes1[0].plot(t_com,coms,color='red',label='COM')

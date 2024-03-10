@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from Classes import *
 from globalvariables import *
 
-startf, endf, stepf = 0,4000, 1
+startf, endf, stepf = 0,np.argmin(np.abs(time_array-15)), 1
 
 def flutterer(Gs, cr, ct, ss, th, ths, thc, startf, endf, stepf, solf, compf, solm, compm):
     #ss, cr, ct, th, ths, thc = ss*39.37, cr*39.37, ct*39.37, th*39.37, ths*39.37, thc*39.37

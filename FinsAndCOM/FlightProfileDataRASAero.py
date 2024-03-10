@@ -26,4 +26,4 @@ az_array = np.array(df.iloc[:, 15])*0.3048
 atmosphere = Atmosphere(z_array)
 pressure_array = atmosphere.pressure
 density_array = atmosphere.density
-q_array = density_array*(np.array(df.iloc[:,17])**2)/2
+q_array = density_array*(np.array(df.iloc[:,17]*0.3048)**2)/2

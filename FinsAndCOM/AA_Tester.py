@@ -6,10 +6,6 @@ from globalvariables import *
 ### Author Ben Sutcliffe, Updated by Kevin Shao
 ### Last modified February 25, 2024
 
-############## FLIGHT PROFILE DATA SOURCE ############
-#RASAero:
-from FlightProfileDataRASAero import *
-#Open Rocket
 
 ############## INITIALIZE STRUCTURES ###################
 Bodyone = Body(Body_dia, Body_len)

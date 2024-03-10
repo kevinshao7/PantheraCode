@@ -6,6 +6,14 @@ from ambiance import Atmosphere
 ############## CONSTANTS ##################
 speed_sound = 343 #speed of sound, m/s shouldn't this be 343?
 
+############## FLIGHT PROFILE DATA SOURCE ############
+#RASAero:
+#from FlightProfileDataRASAero import *
+#flightdatasource = "RASAero"
+
+#Open Rocket
+from FlightProfileDataOpenRocket import *
+flightdatasource="OpenRocket"
 ############## FLIGHT CHARACHTERISTICS ###################
 start_mass = 7.5 #Wet mass, kg
 end_mass = 5.2 #Recovery Mass, kg
@@ -42,7 +50,7 @@ N_fins = 4 #number of rocket fins
 angle_attack = 3 #angle of attack for simulation of stability
 angle_attack_force = 3 #angle of attack for simulation of stability, cannot be equal to zero
 desired_stability = 2.5
-angle_attack_force_run = 0.1 #Angle of attack right after launch
+angle_attack_force_run = 3 #Angle of attack right after launch
 """
 Skin Shear Modulus: {Gs} Pa
 Root chord of {cr}m
@@ -59,3 +67,5 @@ thc = th - 2 * ths
 ############## Centre of Pressure ###################
 #array length 11 of rasaero cops from mach 0,0.5....3 (in inches as given in software)
 cops=[49.21,54.11,55.52,55.71,54.09,52.15,50.05]
+
+
