@@ -70,3 +70,5 @@ thc = th - 2 * ths
 cops=[49.21,54.11,55.52,55.71,54.09,52.15,50.05]
 
 
+#Constant angle of attack
+#Solidworks model

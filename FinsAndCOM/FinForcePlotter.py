@@ -54,6 +54,8 @@ def fin_F_array(angle_attack_force_run:float,test_fins:Fins,test_body:Body, star
   if flightdatasource=="OpenRocket":
     angles = np.array(angleattack_array[start1:end1:step1])
     variableangles=True
+  else:
+     variableangles=False
   print("Using variable angle of attack from OpenRocket flight sim")
   for i in range(start1, end1, step1):
     if variableangles:
@@ -122,12 +124,14 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
     -------
     none, just plots
   """
+
+
   t_plot, f_plot, max_f, cna_plot, h_plot, ang_plot = fin_F_array(angle_attack_force_run,test_fins,test_body, start1, end1, step1)
   print(f'Max Fin Force is {max_f/1000} kN, Max Q is {np.max(q_array)/1000} kPa, Fin area of {test_fins.area()}m^2')
   #print(f'Chord_root, fin_span, Chord_tip, sweep_length, body_radius: {test_fins.Chord_root(), test_fins.fin_span(), test_fins.Chord_tip(), test_fins.sweep_length, test_fins.body_radius()}')
   #Print Normal Force on fins as function of time
   plt.plot(t_plot, f_plot, label = 'Normal Force on Fin') #conversion to kN
-  plt.plot(t_plot,ang_plot,color="red",label="Angle of Attack")
+  plt.plot(t_plot,ang_plot,color="red",label="Angle of Attack (degrees)")
   plt.xlabel('Time(s)')
   plt.ylabel('Total Fin force /N')
   plt.title(f'Angle of Attack is {angle_attack_force_run} degrees')
@@ -149,7 +153,7 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
           plt.axvline(time_array[i+1],ymax=(color_array[i+1]+1)/5, color = colors[int(color_array[i+1])], label = labels[int(color_array[i+1])], linestyle = '--')
   plt.legend()
   plt.show()
-  #Plot Normal Force on Fin as function of time
+  #Plot Normal Force on Fin as function of altitude
   plt.plot(h_plot/1000, f_plot, label = 'Normal Force on Fin') #conversion to kN
   plt.xlabel('Altitude (km)')
   plt.ylabel('Total Fin force /N')
@@ -200,5 +204,68 @@ def fin_F_plotter(test_fins: Fins,test_body:Body):
 #   return wind_s
 
 if __name__ == "__main__":
-  from FlightProfileDataRASAero import *
-  fin_F_plotter()
+  from FlightProfileDataOpenRocket import *
+  Fin = Fins(0.207,0.066,0.036,0,Body_dia/2) 
+  Bodyone = Body(Body_dia, Body_len)
+  Cone = Nosecone(Nosecone_length)  
+  #Plot Normal Force on fins as function of time, assuming constant angle of attack
+  flightdatasource="NotOpenRocket"
+  variableangles=False
+  plt.figure(figsize=(10,10))
+  fig,ax = plt.subplots(2,1,figsize=(10,10))
+  axa=ax[0].twinx()
+  axa.set_ylabel("Angle of Attack (degrees)",color="red")
+  axa.set_ylim([0,5])
+  t_plot, f_plot, max_f, cna_plot, h_plot, ang_plot = fin_F_array(angle_attack_force_run,Fin,Bodyone, start1, end1, step1)
+  ax[0].plot(t_plot, f_plot, label = 'Normal Force on Fin') #conversion to kN
+  ax[0].set_xlabel('Time(s)')
+  ax[0].set_ylabel('Total Fin force /N',color="blue")
+  axa.plot(t_plot,ang_plot,color="red",label="Angle of Attack")
+  ax[0].set_title(f'Angle of Attack is {angle_attack_force_run} degrees')
+  color_array=np.zeros(len(mach_array))
+  for i in range(len(mach_array)):
+      if mach_array[i]<0.8:
+          color_array[i]=0
+      elif mach_array[i]<1.2:
+          color_array[i]=1
+      elif mach_array[i]<5:
+          color_array[i] = 2
+      else:
+          color_array[i] = 3
+  colors = ['grey','green','orange','red']
+  labels = ['Subsonic M<0.8','Transonic 0.8<M<1.2','Supersonic 1.2<M<5','Hypersonic M>5']
+  for i in range(len(color_array)-1):
+      if color_array[i] != color_array[i+1]:
+          ax[0].axvline(time_array[i],ymax=(color_array[i]+1)/5, color = colors[int(color_array[i])], label = labels[int(color_array[i])], linestyle = '-')
+          ax[0].axvline(time_array[i+1],ymax=(color_array[i+1]+1)/5, color = colors[int(color_array[i+1])], label = labels[int(color_array[i+1])], linestyle = '--')
+  ax[0].legend()
+
+  flightdatasource="OpenRocket"
+  t_plot, f_plot, max_f, cna_plot, h_plot, ang_plot = fin_F_array(angle_attack_force_run,Fin,Bodyone, start1, end1, step1)
+  ax3 = ax[1].twinx()
+  ax3.set_ylabel("Angle of Attack (degrees)",color="red")
+  ax3.set_ylim([0,5])
+  ax[1].plot(t_plot, f_plot, label = 'Normal Force on Fin') #conversion to kN
+  ax3.plot(t_plot,ang_plot,color="red",label="Angle of Attack")
+  ax[1].set_xlabel('Time(s)')
+  ax[1].set_ylabel('Total Fin force /N',color="blue")
+  ax[1].set_title(f'Variable Angle of Attack From OpenRocket Simulation')
+  color_array=np.zeros(len(mach_array))
+  for i in range(len(mach_array)):
+      if mach_array[i]<0.8:
+          color_array[i]=0
+      elif mach_array[i]<1.2:
+          color_array[i]=1
+      elif mach_array[i]<5:
+          color_array[i] = 2
+      else:
+          color_array[i] = 3
+  colors = ['grey','green','orange','red']
+  labels = ['Subsonic M<0.8','Transonic 0.8<M<1.2','Supersonic 1.2<M<5','Hypersonic M>5']
+  for i in range(len(color_array)-1):
+      if color_array[i] != color_array[i+1]:
+          ax[1].axvline(time_array[i],ymax=(color_array[i]+1)/5, color = colors[int(color_array[i])], label = labels[int(color_array[i])], linestyle = '-')
+          ax[1].axvline(time_array[i+1],ymax=(color_array[i+1]+1)/5, color = colors[int(color_array[i+1])], label = labels[int(color_array[i+1])], linestyle = '--')
+  ax[1].legend()
+  plt.savefig("FinForceValidation.png")
+  fig.show()
