@@ -1,7 +1,7 @@
 import numpy as np
 from ambiance import Atmosphere
 ##### LAST UPDATE OF VARIABLES AND DESIGN ####
-#February 25, 2024
+#March 11, 2024
 
 ############## CONSTANTS ##################
 speed_sound = 343 #speed of sound, m/s shouldn't this be 343?
@@ -16,12 +16,11 @@ speed_sound = 343 #speed of sound, m/s shouldn't this be 343?
 from FlightProfileDataOpenRocket import *
 flightdatasource="OpenRocket"
 ############## FLIGHT CHARACHTERISTICS ###################
-start_mass = 7.5 #Wet mass, kg
-end_mass = 5.2 #Recovery Mass, kg
-v_burnout = 585 #Burnout velocity, m/s
-max_q_velo = 580.03 #Velocity at Max-Q, m/s
-#MaxQ occurs at 2095 feet
-max_q_alt = 638.6 #m
+start_mass = mass_array[0] #Wet mass, kg
+end_mass = mass_array[-1] #Recovery Mass, kg
+v_burnout = np.max(v_array) #Burnout velocity, m/s
+max_q_velo = v_array[np.argmax(q_array)] #Velocity at Max-Q, m/s
+max_q_alt = z_array[np.argmax(q_array)] #m
 max_q_atmosphere = Atmosphere(np.array([max_q_alt]))
 max_q_rho = max_q_atmosphere.density[0]
 max_q_staticp = max_q_atmosphere.pressure[0]
@@ -30,10 +29,10 @@ max_q_Mach = max_q_velo/speed_sound
 max_q_beta = np.sqrt(abs(max_q_Mach**2 - 1))
 
 ############## ROCKET GEOMETRY ###################
-Nosecone_length = 0.231 #Nosecone length
+Nosecone_length = 0.40 #Nosecone length
 Body_dia = 0.0794 #body diameter in metres
-Body_len = 1.0668 #body tube length
-CoM = 0.842 #for Panthera
+Body_len = 1.36 #body tube length
+CoM = 1.24 #for Panthera
 total_length = Body_len+Nosecone_length
 fineness = total_length/Body_dia
 
@@ -62,8 +61,18 @@ Skin thickness of {ths}m
 Core thickness of {thc}m
 composite mass of {compm}
 freqs are sol {solf} and comp {compf} Hz'
+Composites not implemented for Panthera
 """
-Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 18e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 588, None, 15.36, None #torsion freqs (edited for Al here)
+Gs = 18e9
+cr =  0.267
+ct = 0.0457
+ss =  0.0889
+th = 5e-3
+ths = 1e-3
+solf = 588
+compf =None
+solm = 15.36
+compm= None #torsion freqs (edited for Al here)
 thc = th - 2 * ths
 ############## Centre of Pressure ###################
 #array length 11 of rasaero cops from mach 0,0.5....3 (in inches as given in software)

@@ -29,6 +29,7 @@ y_array = np.array(df.iloc[:, 7])
 l_array = np.array(df.iloc[:, 8]) #lateral position
 vl_array = np.array(df.iloc[:, 10])
 al_array = np.array(df.iloc[:, 11])
+mass_array = np.array(df.iloc[:,19])
 mach_array = np.array(df.iloc[:, 26])
 area_array = np.array(df.iloc[:, 45])/1e4 #Convert cm2 to m2
 pressure_array = np.array(df.iloc[:, 50])*100 #Convert mbar to Pa
