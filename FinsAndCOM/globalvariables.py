@@ -63,16 +63,16 @@ composite mass of {compm}
 freqs are sol {solf} and comp {compf} Hz'
 Composites not implemented for Panthera
 """
-Gs = 18e9
+Gs = 0.1e9
 cr =  0.267
 ct = 0.0457
-ss =  0.0889
-th = 5e-3
-ths = 1e-3
-solf = 588
+ss =  0.086
+th = 10e-3
+ths = 0
+solf = None
 compf =None
-solm = 15.36
-compm= None #torsion freqs (edited for Al here)
+solm = None
+compm= None 
 thc = th - 2 * ths
 ############## Centre of Pressure ###################
 #array length 11 of rasaero cops from mach 0,0.5....3 (in inches as given in software)

@@ -3,6 +3,8 @@ import numpy as np
 from FinForcePlotter import mach_to_times
 from globalvariables import *
 
+#Not very useful because OpenRocket does all this organically
+
 
 class Section():
   def __init__(self, name, mass, start,length,uniform=True,COM=0,units="metric"):

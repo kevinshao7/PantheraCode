@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ambiance import Atmosphere
 
-df = pd.read_csv("FinsAndCOM\Flight_Test_OpenRocket.csv",comment="#")
+df = pd.read_csv("FinsAndCOM\Flight_Test_OpenRocket_Panthera0.6.csv",comment="#")
 
 # Time (s),Altitude (m),Vertical velocity (m/s),Vertical acceleration (m/s²),Total velocity (m/s),
 #Total acceleration (m/s²),Position East of launch (m),Position North of launch (m),Lateral distance (m),Lateral direction (°),
