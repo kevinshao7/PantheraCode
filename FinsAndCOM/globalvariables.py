@@ -63,7 +63,7 @@ composite mass of {compm}
 freqs are sol {solf} and comp {compf} Hz'
 Composites not implemented for Panthera
 """
-Gs = 0.1e9
+Gs = 0.6e9 #birch plywood https://www.sciencedirect.com/science/article/pii/S0950061822015252
 cr =  0.267
 ct = 0.0457
 ss =  0.086
