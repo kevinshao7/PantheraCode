@@ -51,6 +51,7 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
     print('Note that if fin design is changed, these points from FinSim need to be updated. This was just to ensure FinSim and code were in agreement for analysis on flutter')
 
     """
+    plt.title("Fin Flutter Analysis")
     plt.xlabel('Time (s)')
     plt.ylabel('Mach number')
     plt.legend()
@@ -66,10 +67,18 @@ def flutt_plot(sf, sf2, sf_switch, noncomp_switch): #sf is safety factor
 
 if __name__ == "__main__":
     from FlightProfileDataRASAero import *
-    Gs, cr, ct, ss, th, ths, solf, compf, solm, compm = 26.9e9, 0.207, 0.0360, 0.066, 10e-3, 1e-3, 160, 185.6, 15.36, 5.6 #torsion freqs (edited for Al here)
-    # edit above as appropriate. 
-    thc = th - 2 * ths
-    sf = 1.5
+    Gs = 30e9 #Shear Modulus Fibreglass, Pa https://www.azom.com/properties.aspx?ArticleID=764
+    cr =  0.267
+    ct = 0.0457
+    ss =  0.086
+    th = 7e-3
+    ths = 0
+    solf = None
+    compf =None
+    solm = None
+    compm= None 
+    thc = th - 2 * ths    # edit above as appropriate. 
+    sf = 1.2
     sf2 = 2
     sf_switch = True
     noncomp_switch = True

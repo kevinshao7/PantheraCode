@@ -40,9 +40,9 @@ fineness = total_length/Body_dia
 #G_alu = 24E9 #Shear Modulus Aluminium, Pa
 #G_alu_psi = 3.7e6 #Shear Modulus Aluminium, Psi
 #density_alu = 2710 #Density Aluminium, kg/m3
-G_alu = 79.3E9 #Shear Modulus Aluminium, Pa
-G_alu_psi = 11.5e6 #Shear Modulus Aluminium, Psi
-density_alu = 7850 #Density Aluminium, kg/m3 (already edited for steel here)
+G_fib = 30E9 #Shear Modulus Fibreglass, Pa https://www.azom.com/properties.aspx?ArticleID=764
+G_fib_psi = 4.35e6 #Shear Modulus Fibreglass, Psi
+density_fib = 2550 #Density Fibreglass, kg/m3 
 
 ############## FIN PROPERTIES ###################
 Roughness =3e-6 #body surface roughness - corresponding to a painted surface
@@ -63,11 +63,12 @@ composite mass of {compm}
 freqs are sol {solf} and comp {compf} Hz'
 Composites not implemented for Panthera
 """
-Gs = 0.6e9 #birch plywood https://www.sciencedirect.com/science/article/pii/S0950061822015252
+#Gs = 0.6e9 #birch plywood https://www.sciencedirect.com/science/article/pii/S0950061822015252
+Gs = 30e9 #Shear Modulus Fibreglass, Pa https://www.azom.com/properties.aspx?ArticleID=764
 cr =  0.267
 ct = 0.0457
 ss =  0.086
-th = 10e-3
+th = 7e-3
 ths = 0
 solf = None
 compf =None
